@@ -1,0 +1,11 @@
+<?php exit; ?>	คอมพิวเตอร์ ชุด ความรู้เบื้องต้น 1							
+c01	สมองของคอมพิวเตอร์ คืออะไร	4	Disk	Keyboard	Mouse	CPU	HandyDrive	Monitor
+c02	Resolution ของจอภาพ VGA มีขนาดเท่าใด	5	800*1000	300*400	1024*800	640*400	640*480	1000*1024
+c03	แฟ้มนามสกุล MDB เป็นของโปรแกรมใด	4	Word	Excel	PowerPoint	Access	VB	Mail
+c04	Diskette ทั่วไป ขนาด 3.5 นิ้ว เก็บข้อมูลได้เท่าใด	3	1000 MB	1000 KB	1.44 MB	1.44 KB	256 MB	128 MB
+c05	ต้องมีอุปกรณ์ใด จึงจะเชื่อมต่อคอมพิวเตอร์หลายเครื่องเข้าด้วยกันได้	2	Mouse	Hub	CPU	Keyboard	Monitor	Microphone
+c06	นามสกุลใด เป็นของแฟ้มที่มีภาพ และเสียง	3	mid	mp3	avi	wav	jpg	gif
+c07	เครื่อง Hang ต้องกดปุ่มใดต่อไปนี้	5	Delete	Ctrl+Delete	Ctrl+Break	Scroll Lock	Ctrl+Alt+Delete	Num Lock
+c08	Ctrl+V ใน Microsoft Word คืออะไร	2	Copy	Paste	Delete	Visible	Virtual	Vector
+c09	ปุ่ม Start อยู่บนส่วนใด	2	Desktop	Taskbar	Icon	Help	Title	Scroll Bar
+c10	การกู้แฟ้มคืนจาก Recycle Bin ต้องเลือกอะไร	6	Alt+Shift	Page Up	Insert	Backup	Del	Restore
