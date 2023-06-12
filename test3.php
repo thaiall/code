@@ -2,7 +2,7 @@
 /**
  * Script_name: test3.php
  * Code: http://www.thainame.net/quiz/test3.php
- * Version: 2.0.2
+ * Version: 2.0.3
  * Date: 2566-06-12
  * Developer: @thaiall
  *
@@ -14,6 +14,7 @@
  *
  * Description:
  * - 660612: เริ่มนำ code ขึ้น github.com โดย clear ค่าในตัวแปร $header_ads, $footer_ads, และ $footer_tracker
+ * มีที่อยู่โค้ดคือ https://github.com/thaiall/code/blob/main/test3.php
  * - 660506: ข้อสอบชุดนี้ (Test3 บน Thainame.net) ถูกปรับปรุงให้เป็นระบบข้อสอบชุดแรกของผู้พัฒนา
  * ที่เปิดการแสดงเฉลย ผ่าน Mouse over บน glyphicon glyphicon-eye-open
  * ซึ่งพัฒนาต่อจากการแสดงคำถามเป็น image ผ่าน Lightbox เมื่อ Mouse click บน glyphicon glyphicon-th (table header)
@@ -27,6 +28,13 @@
  * - ตัวเลือกมีสูงสุดได้ 7 ตัวเลือก ตามที่กำหนดในตัวแปร $choice_shuffling[ ]
  * - แสดงเฉลยเป็น Tooltips และแสดงคำถามเป็นภาพผ่าน Lightbox
  * - เก็บคะแนนของผู้ทำข้อสอบจำนวน 100 คนล่าสุดเท่านั้น
+ *
+ * Testing:
+ * - กรณีที่คุณครูนำ Script ไปใช้บนเครื่องบริการ เช่น XAMPP สามารถใช้ได้ทันทีโดยไม่ต้องแก้ไข
+ * เช่น ผมนำ Script ไปทดสอบที่ https://thaiall.com/quiz/test3.php แล้วใช้งานได้ทันที
+ * โดยมีเพียง 2 แฟ้ม คือ แฟ้มแรก test3.php ที่ไม่ได้แก้ไข code แต่สามารถใช้แสดงตัวเลือก และบันทึกคะแนนได้
+ * แฟ้มที่ 2 คือ แฟ้มข้อสอบ test3computer1.php ที่เป็น UTF-8
+ * มีตัวอย่างแฟ้มข้อสอบที่เปิดให้ view ได้ เพื่อนำไปใช้คู่กับ script ที่ http://www.thainame.net/quiz/test3computer1.txt
  *
  * Program_Design:
  * - Initial Process Section
@@ -109,9 +117,30 @@ if (isset($dn_desc[$data_name])) $data_desc = $dn_desc[$data_name]; else $data_d
 $desc = "แบบทดสอบออนไลน์สำหรับผู้ทดสอบด้วยตนเอง (Online Testing) - ". $data_name ." - ". $data_desc;
 
 /* Template Variables */
-$header_ads = "";
-$footer_ads = "";
-$footer_tracker = "";
+$header_ads = "<table class='m_still'><tr><td style='background-color:#dddddd;'>
+<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
+<ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3309619467978767' data-ad-slot='8000711351'
+data-ad-format='auto'></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><!-- 06 quiz rsp -->
+</td></tr></table>";
+$footer_ads = "<table class='m_still'><tr><td><script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
+<ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3309619467978767' data-ad-slot='8000711351'
+data-ad-format='auto'></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><!-- 06 quiz rsp --></td></tr></table>";
+$footer_tracker = "<table class='m_still'><tr><td style='text-align:center;background-color:black'>
+<script language=javascript>page='quiz_test3_". $data_name ."'</script><script language='javascript1.1' src='http://hits.truehits.in.th/data/h0013970.js'></script>" .
+'<!-- Histats.com  (div with counter) --><div id="histats_counter"></div>
+<!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push([\'Histats.start\', \'1,4598807,4,9,110,60,00011111\']);
+_Hasync.push([\'Histats.fasi\', \'1\']);
+_Hasync.push([\'Histats.track_hits\', \'\']);
+(function() {
+var hs = document.createElement(\'script\'); hs.type = \'text/javascript\'; hs.async = true;
+hs.src = (\'//s10.histats.com/js15_as.js\');
+(document.getElementsByTagName(\'head\')[0] || document.getElementsByTagName(\'body\')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4598807&101" alt="" border="0"></a></noscript>
+<!-- Histats.com  END  -->
+</td></tr></table>';
 $header = "<!DOCTYPE html><html lang='th'><head><title>แบบทดสอบเตรียมสู่อุดมศึกษา ". $data_name ." - ". $data_desc . "</title>
 <meta charset='utf-8' /><meta name='viewport' content='width=device-width,initial-scale=1' /><meta property='fb:app_id' content='457891482255937' />
 <meta name='keywords' content='". $data_name .",test,quiz,exam,examination' />
@@ -165,7 +194,7 @@ footer($footer);
 /* --- Function Section --- */
 /* Action Check Function */
 function action_check($score_name) {
-global $header,$error_name,$footer,$qok,$cnt_quiz,$qans,$program_name,$user_limited;
+global $header,$error_name,$footer,$qok,$cnt_quiz,$qans,$program_name,$user_limited,$current_time;
 if (isset($_POST["action"]) && isset($_SESSION['start'])) {
   echo $header;
   if ($_POST["action"] == "check") {
@@ -177,10 +206,9 @@ if (isset($_POST["action"]) && isset($_SESSION['start'])) {
     }
     $right = 0;
     $wrong = 0;
-    $qok[$cnt_quiz] = $v;
     foreach ($qok as $k=>$v) {
       $q = explode("\t",$v);
-      $qans[$q[0]] = $q[2];
+      if(isset($q[2])) $qans[$q[0]] = $q[2];
     }
     $mycheck = "";
     foreach ($_POST as $k=>$v) {
@@ -194,6 +222,8 @@ if (isset($_POST["action"]) && isset($_SESSION['start'])) {
     $total = $_POST["total"];
     if ($total <= ($right + $wrong)) {
       $wrong = $total - $right;
+      $redirect_url = $program_name . "?action=report&top=10";
+      echo "<meta http-equiv='refresh' content='10;url=". $redirect_url ."'>";
       echo "<table class='m_still'>";
       echo "<tr><td>ผลการสอบ ของ<br/>". htmlspecialchars($_POST["name"], ENT_QUOTES) . " " . htmlspecialchars($_POST["surname"], ENT_QUOTES);
       echo "<br/><span style='font-weight:bold;'>ทำถูก</span> = $right";
@@ -202,6 +232,7 @@ if (isset($_POST["action"]) && isset($_SESSION['start'])) {
       echo "<br/><span style='font-weight:bold;'>จำนวนข้อสอบ</span> = ". $total;
       echo "<br/><span style='font-weight:bold;'>เริ่มทำเวลา</span> = ". $_SESSION['start'];
       echo "<br/><span style='font-weight:bold;'>แล้วเสร็จเวลา</span> = ". $current_time;
+      echo "<br/><a href='$redirect_url'>เปิดรายงานผลการสอบ 100 อันดับล่าสุด</a>";
       echo "</td></tr></table>";
       $data = htmlspecialchars($_POST["name"], ENT_QUOTES)."\t".htmlspecialchars($_POST["surname"], ENT_QUOTES)."\t".$_POST["subject"]."\t";
       $data = $data . $right."\t".$total."\t".$_SESSION['start']."\t".$current_time."\n";
@@ -213,7 +244,7 @@ if (isset($_POST["action"]) && isset($_SESSION['start'])) {
       fputs ($fw,$data);
       for ($i=0;$i<$limit;$i++) fputs ($fw,$fr[$i]);
       fclose ($fw);
-      echo "<meta http-equiv='refresh' content='10;url=". $program_name . "?action=report&top=10'>";
+
       unset($_SESSION["start"]);
     } else {
       echo "<span style='color:red;font-size:20px;'>ท่านทำข้อสอบเพียง : " . ($right + $wrong) ." ข้อ<br/>";
@@ -234,7 +265,7 @@ if (isset($_GET["action"])) {
     $bg_color = "";
     foreach ($ar as $k=>$v) {
       $i++;
-      if (!isset($_GET["top"]) || $i <= 10) {
+      if (!isset($_GET["top"]) || $i <= $_GET["top"]) {
         $ar = explode("\t",$v);
         if (strlen($bg_color) == 0) $bg_color = " bgcolor='#ddffff'"; else $bg_color = "";
         if (isset($ar[3]) && isset($ar[4]) && $ar[3] == $ar[4]) $bg_color = " bgcolor='#ffdddd'";
@@ -293,7 +324,7 @@ foreach ($rnd as $k=>$v) {
   if (strlen($bg_color) == 0) { $bg_color = " style='background-color:#ddffff'"; } else { $bg_color = ""; }
   echo "<tr $bg_color><td style='font-size:20px;'><div style='background-color:#ffffdd;border:1px outset white;border-radius:20px;box-shadow:5px 5px 5px lightgrey;padding:5px;margin:20px;'>"; 
   echo $total_question.". ".$q[1]." ";
-  $img = "q=". $q[1];
+  $img = "q=" . $q[1];
   $cok = rand(1,7);
   $choice = 1;
   for($i=3;$i<10;$i++) {
@@ -305,7 +336,7 @@ foreach ($rnd as $k=>$v) {
     }
   }
   echo "<div style='width:100%;text-align:center;'>
-  <a style='margin:10px;' href='image.php?". $img."' target='_blank' title='คำถาม ". $q[1] ."' rel='lightbox[ข้อสอบออนไลน์]'><span class='glyphicon glyphicon-eye-open' style='font-size:30px;color:blue;'></span></a>
+  <a style='margin:10px;' href='image.php?". $img ."' target='_blank' title='คำถาม ". $q[1] ."' rel='lightbox[ข้อสอบออนไลน์]'><span class='glyphicon glyphicon-eye-open' style='font-size:30px;color:blue;'></span></a>
   <a style='margin:10px;' data-toggle='tooltip' title='เฉลย คือ ". $q[intval($q[2]) + 2] ."'><span class='glyphicon glyphicon-comment' style='font-size:30px;color:green;'></span></a>
   </div>";
   echo "</div></td></tr>\n";
@@ -314,8 +345,8 @@ echo "<tr><td style='background-color:#cccccc;text-align:center;'>
 <table class='m_still' style='background-color:#dddddd;width:95%;margin-left:auto;margin-right:auto;'>
 <tr><td colspan='2' style='background-color:black;color:white;font-size:24px;'>คำชี้แจง</td></tr>
 $remark
-<tr><td style='text-align:right;'>ชื่อ :</td><td style='text-align:left;'><input name='name' size='20' value='$name' /> เช่น Steve</td></tr>
-<tr><td style='text-align:right;'>สกุล :</td><td style='text-align:left;'><input name='surname' size='20' value='$surname' /> เช่น Jobs</td></tr>
+<tr><td style='text-align:right;'>ชื่อ</td><td style='text-align:left;'><input name='name' size='20' value='$name' /> เช่น Steve</td></tr>
+<tr><td style='text-align:right;'>สกุล</td><td style='text-align:left;'><input name='surname' size='20' value='$surname' /> เช่น Jobs</td></tr>
 </table>
 $remark_send
 <br/><input type='submit' value='ส่งคำตอบ' style='background-color:darkblue;color:white;font-size:20px;width:200px;height:40px;border:2px outset black;border-radius:20px;' /></td></tr></table>
