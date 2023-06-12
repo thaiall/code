@@ -117,30 +117,9 @@ if (isset($dn_desc[$data_name])) $data_desc = $dn_desc[$data_name]; else $data_d
 $desc = "แบบทดสอบออนไลน์สำหรับผู้ทดสอบด้วยตนเอง (Online Testing) - ". $data_name ." - ". $data_desc;
 
 /* Template Variables */
-$header_ads = "<table class='m_still'><tr><td style='background-color:#dddddd;'>
-<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
-<ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3309619467978767' data-ad-slot='8000711351'
-data-ad-format='auto'></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><!-- 06 quiz rsp -->
-</td></tr></table>";
-$footer_ads = "<table class='m_still'><tr><td><script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
-<ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3309619467978767' data-ad-slot='8000711351'
-data-ad-format='auto'></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><!-- 06 quiz rsp --></td></tr></table>";
-$footer_tracker = "<table class='m_still'><tr><td style='text-align:center;background-color:black'>
-<script language=javascript>page='quiz_test3_". $data_name ."'</script><script language='javascript1.1' src='http://hits.truehits.in.th/data/h0013970.js'></script>" .
-'<!-- Histats.com  (div with counter) --><div id="histats_counter"></div>
-<!-- Histats.com  START  (aync)-->
-<script type="text/javascript">var _Hasync= _Hasync|| [];
-_Hasync.push([\'Histats.start\', \'1,4598807,4,9,110,60,00011111\']);
-_Hasync.push([\'Histats.fasi\', \'1\']);
-_Hasync.push([\'Histats.track_hits\', \'\']);
-(function() {
-var hs = document.createElement(\'script\'); hs.type = \'text/javascript\'; hs.async = true;
-hs.src = (\'//s10.histats.com/js15_as.js\');
-(document.getElementsByTagName(\'head\')[0] || document.getElementsByTagName(\'body\')[0]).appendChild(hs);
-})();</script>
-<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4598807&101" alt="" border="0"></a></noscript>
-<!-- Histats.com  END  -->
-</td></tr></table>';
+$header_ads = "";
+$footer_ads = "";
+$footer_tracker = "";
 $header = "<!DOCTYPE html><html lang='th'><head><title>แบบทดสอบเตรียมสู่อุดมศึกษา ". $data_name ." - ". $data_desc . "</title>
 <meta charset='utf-8' /><meta name='viewport' content='width=device-width,initial-scale=1' /><meta property='fb:app_id' content='457891482255937' />
 <meta name='keywords' content='". $data_name .",test,quiz,exam,examination' />
