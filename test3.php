@@ -2,8 +2,8 @@
 /**
  * Script_name: test3.php
  * Code: http://www.thainame.net/quiz/test3.php
- * Version: 2.0.3
- * Date: 2566-06-12
+ * Version: 2.0.4
+ * Date: 2566-06-15
  * Developer: @thaiall
  *
  * Objectives:
@@ -13,6 +13,10 @@
  * โดยแยกตามสาระการเรียนรู้ที่น่าสนใจ เช่น ความรู้พื้นฐานด้านภาษาอังกฤษ คณิตศาสตร์ ภาษาไทย คอมพิวเตอร์
  *
  * Description:
+ * - 660615: ปรับเพิ่มหมายเหตุ เพื่ออธิายการใช้คำสั่งใน Initial Process Section
+ * ปรับค่าของตัวแปรใน Template Variables ใ้ห้เหลือบรรทัดเดียวทั้งหมด
+ * เพิ่มปุ่มกลับไปทำข้อสอบใหม่ กรณีกรอกข้อมูลไม่ครบตามเงื่อนไข
+ * เปลี่ยนจาก exit; เป็น function exit();
  * - 660612: เริ่มนำ code ขึ้น github.com โดย clear ค่าในตัวแปร $header_ads, $footer_ads, และ $footer_tracker
  * มีที่อยู่โค้ดคือ https://github.com/thaiall/code/blob/main/test3.php
  * - 660506: ข้อสอบชุดนี้ (Test3 บน Thainame.net) ถูกปรับปรุงให้เป็นระบบข้อสอบชุดแรกของผู้พัฒนา
@@ -35,6 +39,29 @@
  * โดยมีเพียง 2 แฟ้ม คือ แฟ้มแรก test3.php ที่ไม่ได้แก้ไข code แต่สามารถใช้แสดงตัวเลือก และบันทึกคะแนนได้
  * แฟ้มที่ 2 คือ แฟ้มข้อสอบ test3computer1.php ที่เป็น UTF-8
  * มีตัวอย่างแฟ้มข้อสอบที่เปิดให้ view ได้ เพื่อนำไปใช้คู่กับ script ที่ http://www.thainame.net/quiz/test3computer1.txt
+ *
+ * Quiz_Preparation:
+ * - การเตรียมแฟ้มข้อสอบนั้นมี 9 ขั้นตอนดังนี้
+ * 1. นำแฟ้มข้อสอบตัวอย่าง ไปเปิดบนโปรแกรม Excel ซึ่งง่ายที่สุดสำหรับการใช้เครื่องมือพื้นฐาน
+ * แล้วเลือก Get External Data: From Text และเลือกประเภทแฟ้มเป็น All Files (*.*)
+ * 2. ข้อสอบ ตัวเลือก และเฉลยแต่ละข้อจะอยู่รวมกันใน 1 บรรทัด ซึ่งแยกด้วย Delimited: Tab
+ * แฟ้มข้อสอบโดยปกติมีการ Encoding แบบ UTF-8 ถ้าอ่านไม่ออกให้เปลี่ยนเป็นแบบ 874 : Thai (Windows)
+ * 3. ผลการใช้ Delimited จะทำให้แต่ละคอลัม แยกออกจากกันชัดเจน
+ * สามารถตรวจสอบผลการแบ่งคอลัมในส่วนของ Data preview ได้
+ * 4. ผลการนำเข้าแฟ้มข้อสอบตัวอย่าง ลงในโปรแกรม Excel สำเร็จด้วยดี
+ * ต่อจากนี้คือการป้อนข้อสอบชุดใหม่ ทั้งคำถาม เฉลย และตัวเลือกจนแล้วเสร็จ
+ * 5. บันทึกแฟ้มข้อสอบด้วย Save as และเปลี่ยนชื่อแฟ้ม และ Extension เป็น .php
+ * แล้วกดปุ่ม Save ซึ่งชื่อแฟ้ม และการเปลี่ยน Extension สามารถทำได้บน Explorer
+ * 6. เปิดแฟ้มข้อสอบที่บันทึกแล้ว ด้วยการกด Right click บนชื่อแฟ้มใน Explorer
+ * ในเบื้องต้นสามารถเปิดด้วย Notepad เพื่อสำรวจว่ามีข้อสอบชุดที่ได้ปรับปรุงแล้ว
+ * 7. ถ้าแฟ้มข้อสอบมีรหัสตัดบรรทัด คือ 13 และ 10 ก็จะเห็นข้อสอบเรียงข้ออ่านง่าย
+ * แต่ถ้าแฟ้มข้อสอบมีรหัสตัดบรรทัด คือ 10 ก็จะเห็นข้อมูลทั้งหมดอยู่ในบรรทัดเดียวบน notepad
+ * ซึ่งโปรแกรม test3.php สามารถนำแฟ้มข้อสอบมาใช้ได้ทั้ง 2 กรณี
+ * 8. ถ้าแฟ้มข้อสอบมีรูปแบบที่ถูกต้อง มีชื่อแฟ้ม และ extension ตามที่กำหนด
+ * และเมื่อทดสอบบนเครื่องบริการร่วมกับ test3.php ก็จะปรากฎตัวเลือกมาให้ฝึกทำ
+ * 9. เมื่อได้ทำข้อสอบแล้วเสร็จ ระบบจะเก็บผลสอบจำนวน 100 รายการล่าสุด
+ * และสามารถเปลี่ยน URL จาก top=10 เป็น top=100 เพื่อขยายรายการแสดงผลได้
+ * ระบบนี้ผู้สอบทุกคนสามารถเปิดรายงานได้ ดังนั้นการนำไปใช้ในระบบปิดจะปลอดภัยกว่า
  *
  * Program_Design:
  * - Initial Process Section
@@ -66,17 +93,23 @@
 */
 
 /* --- Initial Process Section --- */
+/* เครื่องบริการที่ใช้อยู่กำหนด Time Zone เป็น UTC
+เพื่อให้นำเวลามาใช้ได้ทันทีโดยไม่ต้อง +7 ชั่วโมงเข้าไป
+คือ กำหนด Time Zone เป็น Asia/Bangkok ก็จะได้เวลาของประเทศไทย */
 date_default_timezone_set("Asia/Bangkok");
+/* เนื่องจากมีการเก็บชื่อ นามสกุล วิชา และเวลาเริ่มต้นของผู้ทำข้อสอบ
+สำหรับนำไปใช้ในหน้าต่อไป หรือข้อสอบชุดต่อไปได้
+การใช้ตัวแปร SESSION เป็นวิธีหนึ่งที่ได้รับความนิยม */
 session_start();
 
 /* --- Variables Section --- */
 /* Global Variables */
-$version = "2.660612";
+$version = "2.660615";
 $program_name = "test3.php";
 $data_name = "computer1";
 $score_name = "test3score.txt";
 $current_time = date("j M Y g:i:sa");
-$user_limited = 100;   // เก็บข้อมูลสมาชิกเพียง 100 ระเบียนเท่านั้น
+$user_limited = 100;   /* เก็บข้อมูลสมาชิกเพียง 100 ระเบียนเท่านั้น */
 $this_server = "http://www.thainame.net";
 $og_image = $this_server . "/quiz/g1816.jpg";
 $this_url =  $this_server . "/quiz/test3.php";
@@ -117,49 +150,19 @@ if (isset($dn_desc[$data_name])) $data_desc = $dn_desc[$data_name]; else $data_d
 $desc = "แบบทดสอบออนไลน์สำหรับผู้ทดสอบด้วยตนเอง (Online Testing) - ". $data_name ." - ". $data_desc;
 
 /* Template Variables */
+if(!isset($_SERVER['HTTP_HOST']) || $_SERVER['HTTP_HOST'] !="www.thainame.net") {
+$header_ads = $footer_ads = $footer_tracker = ""; 
+} else {
 $header_ads = "";
 $footer_ads = "";
 $footer_tracker = "";
-$header = "<!DOCTYPE html><html lang='th'><head><title>แบบทดสอบเตรียมสู่อุดมศึกษา ". $data_name ." - ". $data_desc . "</title>
-<meta charset='utf-8' /><meta name='viewport' content='width=device-width,initial-scale=1' /><meta property='fb:app_id' content='457891482255937' />
-<meta name='keywords' content='". $data_name .",test,quiz,exam,examination' />
-<meta name='description' content='". $desc . " ". $explain ."' />
-<meta property='og:image' content='". $og_image ."' />
-<link type='text/css' rel='stylesheet' href='rsp81.css' /><link rel='icon' type='image/x-icon' href='rsp.ico' />
-<meta property='og:url' content='". $this_url ."' /><meta property='og:title' content='ข้อสอบ ". $data_name ." - ". $data_desc . "' /><meta property='og:description' content='". $desc . " ". $explain ."' /><meta property='og:type' content='article' />
-</head><body id='main'><table class='m_still' style='background-color:black;color:white'><tr><td style='font-size:24px;text-align:left;'>
-<img src='". $og_image ."' class='imgborder' style='float:right;' alt='cover image' />
-<span style='font-weight:bold;'>แบบทดสอบเตรียมสู่อุดมศึกษา</span><br/><span style='color:yellow;font-size:16px;'>". $data_desc ."</span>". $explain_html ."</td></tr></table>";
-$header_report = "<table class='m_still'>
-<tr style='background-color:black;text-align:center;'><td colspan='7' style='color:white;'>สถิติผู้ทำข้อสอบ</td></tr>
-<tr style='background-color:#dddddd;text-align:center;'><td>ลำดับ</td><td>ชื่อ-สกุล</td><td>รหัสวิชา</td><td>จำนวนถูก</td>
-<td>จำนวนข้อ</td><td>เวลาเริ่ม</td><td>เวลาเสร็จ</td></tr>";
-$footer = "<link rel='stylesheet' href='../bootstrap/bootstrap.min.css' />
-<script src='../bootstrap/jquery-3.5.1.min.js'></script>
-<script src='../bootstrap/bootstrap.min.js'></script>
-<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css' type='text/css' media='screen' />
-<script src='//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox-plus-jquery.js'></script>
-<script>jQuery.noConflict();</script>
-<script>$(document).ready(function(){ $('[data-toggle=\"tooltip\"]').tooltip(); });</script>
-<table class='m_still'><tr><td><div style='background-color:#ddffdd;border:1px outset white;border-radius:10px;box-shadow:5px 5px 5px lightgrey;padding:5px;margin:5px;text-align:center;font-size:12px;'>
-<a href='?action=report'>คลิกเปิดสถิติผู้ทำข้อสอบ 100 รายการล่าสุด</a>
-<br/>แนะนำ:
-<a href='/quiz/'>รวม</a> /
-<a href='?'>คอมพิวเตอร์ฯ #1</a> /
-<a href='?subj=pepe_engl_001'>อังกฤษ #p1</a> /
-<a href='?subj=maya_engl_001'>อังกฤษ #m1</a> /
-<a href='?subj=fondao_engl_001'>อังกฤษ #f1</a>
-<br/><a href='?". $subj ."'>คลิกเพื่อเริ่มต้นทำชุดนี้อีกครั้ง</a> : โค้ดรุ่น $version : เวลา : $current_time
-</div></td></tr></table>" . $footer_tracker;
+}
+$header = "<!DOCTYPE html><html lang='th'><head><title>แบบทดสอบเตรียมสู่อุดมศึกษา ". $data_name ." - ". $data_desc . "</title><meta charset='utf-8' /><meta name='viewport' content='width=device-width,initial-scale=1' /><meta property='fb:app_id' content='457891482255937' /><meta name='keywords' content='". $data_name .",test,quiz,exam,examination' /><meta name='description' content='". $desc . " ". $explain ."' /><meta property='og:image' content='". $og_image ."' /><link type='text/css' rel='stylesheet' href='rsp81.css' /><link rel='icon' type='image/x-icon' href='rsp.ico' /><meta property='og:url' content='". $this_url ."' /><meta property='og:title' content='ข้อสอบ ". $data_name ." - ". $data_desc . "' /><meta property='og:description' content='". $desc . " ". $explain ."' /><meta property='og:type' content='article' /></head><body id='main'><table class='m_still' style='background-color:black;color:white'><tr><td style='font-size:24px;text-align:left;'><img src='". $og_image ."' class='imgborder' style='float:right;' alt='cover image' /><span style='font-weight:bold;'>แบบทดสอบเตรียมสู่อุดมศึกษา</span><br/><span style='color:yellow;font-size:16px;'>". $data_desc ."</span>". $explain_html ."</td></tr></table>";
+$header_report = "<table class='m_still'><tr style='background-color:black;text-align:center;'><td colspan='7' style='color:white;'>สถิติผู้ทำข้อสอบ</td></tr><tr style='background-color:#dddddd;text-align:center;'><td>ลำดับ</td><td>ชื่อ-สกุล</td><td>รหัสวิชา</td><td>จำนวนถูก</td><td>จำนวนข้อ</td><td>เวลาเริ่ม</td><td>เวลาเสร็จ</td></tr>";
+$footer = "<link rel='stylesheet' href='../bootstrap/bootstrap.min.css' /><script src='../bootstrap/jquery-3.5.1.min.js'></script><script src='../bootstrap/bootstrap.min.js'></script><link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css' type='text/css' media='screen' /><script src='//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox-plus-jquery.js'></script><script>jQuery.noConflict();</script><script>$(document).ready(function(){ $('[data-toggle=\"tooltip\"]').tooltip(); });</script><table class='m_still'><tr><td><div style='background-color:#ddffdd;border:1px outset white;border-radius:10px;box-shadow:5px 5px 5px lightgrey;padding:5px;margin:5px;text-align:center;font-size:12px;'><a href='?action=report'>คลิกเปิดสถิติผู้ทำข้อสอบ 100 รายการล่าสุด</a><br/>แนะนำ: <a href='/quiz/'>รวม</a> / <a href='?'>คอมพิวเตอร์ฯ #1</a> / <a href='?subj=pepe_engl_001'>อังกฤษ #p1</a> / <a href='?subj=maya_engl_001'>อังกฤษ #m1</a> / <a href='?subj=fondao_engl_001'>อังกฤษ #f1</a><br/><a href='?". $subj ."'>คลิกเพื่อเริ่มต้นทำชุดนี้อีกครั้ง</a> : โค้ดรุ่น $version : เวลา : $current_time</div></td></tr></table>" . $footer_tracker;
 $error_name = "<span style='color:red;font-size:20px;'>กรอกชื่อ หรือนามสกุล ไม่ครบ<br/>แสดงว่าไม่อ่านคำชี้แจง ให้เริ่มต้นทำข้อสอบทั้งหมดใหม่</span><br/><br/>";
 $error_subj = "<span style='color:red;font-size:20px;'>ไม่พบแฟ้มวิชาที่ท่านต้องการสอบ<br/>ต้องกลับไปเลือกวิชาให้ถูกต้อง</span><br/><br/>";
-$remark = "<tr><td colspan='2' style='color:darkblue;text-align:left;font-size:16px;'>
-<span class='bigcap35' style='line-height: 0.2;'>โ</span>ปรดดำเนินการให้ครบทุกข้อ <span style='font-weight:bold;'>ก่อนคลิกปุ่มส่งคำตอบ</span> มีขั้นตอนดังนี้ 
-<span style='font-weight:bold;'>1)</span> ทำข้อสอบให้ครบทุกข้อ
-<span style='font-weight:bold;'>2)</span> กรอกทั้งชื่อ-สกุลของผู้ทำข้อสอบ
-<span style='font-weight:bold;'>3)</span> คลิกปุ่มส่งคำตอบ แล้วผลสอบจะถูกบันทึกเพียง 100 รายการล่าสุด โดยบันทึกชื่อ สกุล คะแนน เวลาเริ่มทำ และเวลาสิ้นสุดลงในฐานข้อมูล
-หากไม่ประสงค์ระบุชื่อ-สกุลจริง ให้ใส่ชื่อไอดอลที่ท่านชื่นชอบแทน เช่น Steve Jobs
-</td></tr>";
+$remark = "<tr><td colspan='2' style='color:darkblue;text-align:left;font-size:16px;'><span class='bigcap35' style='line-height: 0.2;'>โ</span>ปรดดำเนินการให้ครบทุกข้อ <span style='font-weight:bold;'>ก่อนคลิกปุ่มส่งคำตอบ</span> มีขั้นตอนดังนี้ <span style='font-weight:bold;'>1)</span> ทำข้อสอบให้ครบทุกข้อ <span style='font-weight:bold;'>2)</span> กรอกทั้งชื่อ-สกุลของผู้ทำข้อสอบ <span style='font-weight:bold;'>3)</span> คลิกปุ่มส่งคำตอบ แล้วผลสอบจะถูกบันทึกเพียง 100 รายการล่าสุด โดยบันทึกชื่อ สกุล คะแนน เวลาเริ่มทำ และเวลาสิ้นสุดลงในฐานข้อมูล หากไม่ประสงค์ระบุชื่อ-สกุลจริง ให้ใส่ชื่อไอดอลที่ท่านชื่นชอบแทน เช่น Steve Jobs </td></tr>";
 $remark_send = "<span style='color:red;line-height:30px;'>ขอย้ำว่าทำให้ครบทุกข้อ และกรอกชื่อ-สกุลของผู้ทำข้อสอบ<br/>จึงจะตรวจข้อสอบ แจ้งผล บันทึกในรายงานสถิติผู้เข้าสอบ 100 คน</span>";
 
 /* --- Main Process Section --- */
@@ -178,13 +181,11 @@ if (isset($_POST["action"]) && isset($_SESSION['start'])) {
   echo $header;
   if ($_POST["action"] == "check") {
     if (strlen($_POST["name"]) == 0 || strlen($_POST["surname"]) == 0 || strlen(iconv('UTF-8','TIS-620',$_POST["surname"])) > 30 || strlen(iconv('UTF-8','TIS-620',$_POST["name"])) > 30 ) {
-      echo strlen(iconv('UTF-8','TIS-620',$_POST["surname"])) ."-". strlen(iconv('UTF-8','TIS-620',$_POST["name"]))."<br/>";
-      echo $error_name.$footer."</body></html>";	  
       unset($_SESSION["start"]);
-      exit;
+      echo strlen(iconv('UTF-8','TIS-620',$_POST["surname"])) ."-". strlen(iconv('UTF-8','TIS-620',$_POST["name"]))."<br/>";
+      exit($error_name . $footer . "</body></html>");
     }
-    $right = 0;
-    $wrong = 0;
+    $right = $wrong = 0;
     foreach ($qok as $k=>$v) {
       $q = explode("\t",$v);
       if(isset($q[2])) $qans[$q[0]] = $q[2];
@@ -223,11 +224,9 @@ if (isset($_POST["action"]) && isset($_SESSION['start'])) {
       fputs ($fw,$data);
       for ($i=0;$i<$limit;$i++) fputs ($fw,$fr[$i]);
       fclose ($fw);
-
       unset($_SESSION["start"]);
     } else {
-      echo "<span style='color:red;font-size:20px;'>ท่านทำข้อสอบเพียง : " . ($right + $wrong) ." ข้อ<br/>";
-      echo "ไม่ครบ ". $total . " ข้อ<br/>จึงไม่ตรวจให้ .. ท่านต้องกลับไปทำให้ครบ</span><br/><br/>";
+      echo "<div class='m_still' style='color:red;font-size:20px;'>ท่านทำข้อสอบเพียง : " . ($right + $wrong) ." ข้อ<br/>ไม่ครบ ". $total . " ข้อ<br/>จึงไม่ตรวจให้ .. ท่านต้องกลับไปทำให้ครบ<br/><button onclick='history.back()'>กลับไปทำใหม่</button></span></div>";
     }
   }
 }
@@ -255,8 +254,7 @@ if (isset($_GET["action"])) {
     }
     echo "</table>";
   }
-  echo $footer . $footer_ads . "</body></html>";
-  exit;
+  exit($footer . $footer_ads . "</body></html>");
 }
 }
 
@@ -265,13 +263,12 @@ function read_quiz_file($data_namef) {
 global $qok,$rnd,$cnt_quiz,$error_subj,$footer;
 $cnt_quiz = 0;
 if (!file_exists($data_namef)) {
-  echo "[ " . $data_namef. " ]<br/>" .$error_subj.$footer."</body></html>";
-  exit;
+  exit("[ " . $data_namef . " ]<br/>" . $error_subj . $footer . "</body></html>");
 }
 $ar = file($data_namef);
 foreach ($ar as $v) {
   $q = explode("\t",$v);
-  if (isset($q[2]) && strlen($q[2]) > 0) { // ตรวจว่ามีเฉลยหรือไม่
+  if (isset($q[2]) && strlen($q[2]) > 0) { /* ตรวจว่ามีเฉลยหรือไม่ */
     $qok[$cnt_quiz] = str_replace(array("\r\n", "\n", "\r"),"",$v);
     $rnd[$cnt_quiz] = rand();
     $cnt_quiz = $cnt_quiz + 1;
@@ -293,7 +290,7 @@ $choice_shuffling[7] = array(2,4,1,3,7,6,5);
 echo $header . $header_ads;
 $_SESSION['start'] = $current_time;
 echo "<form action='test3.php' method='post'><table class='m_still'><tr><td>";
-asort($rnd); // ทำให้ array จัดเรียงตามค่าสุ่ม
+asort($rnd); /* ทำให้ array จัดเรียงตามค่าสุ่ม */
 $total_question = 0;
 echo "<table style='background-color:#f9f9f9;'>";
 $bg_color = "";
@@ -314,10 +311,7 @@ foreach ($rnd as $k=>$v) {
       $img .= "&c". $choice++ ."=". $q[$choice_shuffling[$cok][$i - 3] + 2];
     }
   }
-  echo "<div style='width:100%;text-align:center;'>
-  <a style='margin:10px;' href='image.php?". $img ."' target='_blank' title='คำถาม ". $q[1] ."' rel='lightbox[ข้อสอบออนไลน์]'><span class='glyphicon glyphicon-eye-open' style='font-size:30px;color:blue;'></span></a>
-  <a style='margin:10px;' data-toggle='tooltip' title='เฉลย คือ ". $q[intval($q[2]) + 2] ."'><span class='glyphicon glyphicon-comment' style='font-size:30px;color:green;'></span></a>
-  </div>";
+  echo "<div style='width:100%;text-align:center;'><a style='margin:10px;' href='image.php?". $img ."' target='_blank' title='คำถาม ". $q[1] ."' rel='lightbox[ข้อสอบออนไลน์]'><span class='glyphicon glyphicon-eye-open' style='font-size:30px;color:blue;'></span></a><a style='margin:10px;' data-toggle='tooltip' title='เฉลย คือ ". $q[intval($q[2]) + 2] ."'><span class='glyphicon glyphicon-comment' style='font-size:30px;color:green;'></span></a></div>";
   echo "</div></td></tr>\n";
 }
 echo "<tr><td style='background-color:#cccccc;text-align:center;'>
@@ -337,7 +331,6 @@ $remark_send
 
 /* Footer Function */
 function footer($footer){
-  echo $footer . "</body></html>"; /* หยุดแสดง google adsense $footer_ads */
-  exit; /* ออกจากโปรแกรม */
+  exit($footer . "</body></html>"); /* หยุดแสดง google adsense $footer_ads */
 }
 ?>
