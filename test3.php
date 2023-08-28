@@ -2,8 +2,8 @@
 /**
  * Script_name: test3.php
  * Code: http://www.thainame.net/quiz/test3.php
- * Version: 3.0.2
- * Date: 2566-08-21
+ * Version: 3.0.3
+ * Date: 2566-08-28
  * Developer: @thaiall
  *
  * Objectives:
@@ -19,6 +19,8 @@
  * เช่น ความรู้พื้นฐานด้านภาษาอังกฤษ คณิตศาสตร์ ภาษาไทย คอมพิวเตอร์ 
  *
  * Updated:
+ * - 660828: ปรับแก้ชื่อตัวแปร เช่น this_url เป็น og_url
+ * เพิ่ม $this_folder เพื่อให้ใช้ใน folder อื่นได้ง่ายขึ้น
  * - 660808: กำหนด line-height:100% และลดช่องว่างระหว่าง quiz_box
  * สลับสีของตัวเลือก เป็นแดงเข้ม กับ น้ำเงินเข้ม โดยใช้ ตัวดำเนินการแบบ ternary operator หรือ if else แบบย่อ
  * เปลี่ยนวิธีกำหนดค่าอาร์เรย์ $choice_shuffling ให้รวบรัดขึ้น
@@ -92,15 +94,15 @@
  * ระบบนี้ผู้สอบทุกคนสามารถเปิดรายงานได้ ดังนั้นการนำไปใช้ในระบบปิดจะปลอดภัยกว่า
  *
  * Program_Design:
- * - Initial Process Section
- * - Variables Section
+ * - Initial Process Section [1]
+ * - Variables Section [2]
  *   + Global Variables
  *   + Prepare Session and Request Variables
  *   + Array Variables
  *   + Template Variables
- *   + Pattern Functions
- * - Main Process Section
- * - Function Section
+ * - Pattern Section [3]
+ * - Main Process Section [4]
+ * - Function Section [5]
  *   + Action Report Function
  *   + Read Quiz File and Make Randomization Function
  *   + Action Check Function
@@ -141,8 +143,9 @@ $score_name = 'test3score.txt';
 $current_time = date('j M Y g:i:sa');
 $user_limited = 100;   /* เก็บข้อมูลสมาชิกเพียง 100 ระเบียนเท่านั้น */
 $this_domain = 'thainame.net';
-$og_image = 'http://www.'. $this_domain . '/quiz/g1816.jpg';
-$this_url =  'http://www.'. $this_domain . '/quiz/test3.php';
+$this_folder = '/quiz'; /* root is  / */
+$og_image = 'http://www.'. $this_domain . $this_folder .'/g1816.jpg'; /* og:image */
+$og_url =  'http://www.'. $this_domain . $this_folder .'/'. $program_name; /* og:url */
 $redirect_tag = '<meta http-equiv="refresh" content="10;url='. $program_name . '?action=report&top=10">';
 
 /* Quiz ID Variables */
@@ -162,12 +165,12 @@ if (isset($_POST['name'])) { $name = $_POST['name']; $_SESSION['name'] = $name; 
 if (isset($_POST['surname'])) { $surname = $_POST['surname']; $_SESSION['surname'] = $surname; }
 if (isset($_REQUEST['subj'])) $data_name  = $_REQUEST['subj'];
 if (isset($_REQUEST['subject'])) $data_name = $_REQUEST['subject'];
-if (isset($_REQUEST['subj']) || isset($_REQUEST['subject'])) { $this_url .= '?subj=' . $data_name; }
-$data_namef = 'test3'. $data_name . '.php';
+if (isset($_REQUEST['subj']) || isset($_REQUEST['subject'])) { $og_url .= '?subj=' . $data_name; }
+$data_namef = 'test3'. $data_name . '.php'; /* my file-name formating is test3fondao_engl_010.php */
 
 /* Facebook Open Graph Variables */
 if (isset($og_desc[$data_name])) $desc = $og_desc[$data_name];
-if (isset($og_img[$data_name])) $og_image = 'http://www.' . $this_domain . '/quiz/' . $og_img[$data_name];
+if (isset($og_img[$data_name])) $og_image = 'http://www.' . $this_domain . $this_folder .'/' . $og_img[$data_name];
 
 /* CSS Variables */
 $css['header'] = 'display:table;background-color:teal;color:white;font-size:24px;text-align:center;';
@@ -183,9 +186,9 @@ $css['quiz_box'] = 'background-color:#ffffdd;border-radius:20px;padding:5px;marg
 
 /* Template Variables */
 if(!isset($_SERVER['HTTP_HOST']) || substr($_SERVER['HTTP_HOST'],strlen($this_domain) * -1) != $this_domain || isset($_REQUEST['view'])) {
-$header_ads = $footer_ads = $footer_tracker = ''; 
+$header_ads = $footer_ads = $footer_tracker = '';
 } else {
-$header_ads = $footer_ads = $footer_tracker = ''; 
+$header_ads = $footer_ads = $footer_tracker = '';
 }
 if (isset($dn_explain[$data_name]) && !isset($_REQUEST['view'])) { $explain = $dn_explain[$data_name]; $explain_html = '<br/><span style="font-weight:bold;">คำแนะนำ</span>: <span style="font-size:16px;">'. $explain .'</span>'; }else { $explain = ''; $explain_html = ''; }
 if (isset($dn_desc[$data_name])) $data_desc = $dn_desc[$data_name]; else $data_desc ='';
@@ -195,7 +198,7 @@ $header = "<!DOCTYPE html><html lang='th'><head><title>แบบทดสอบ 
 <meta name='viewport' content='width=device-width,initial-scale=1' /><meta property='fb:app_id' content='457891482255937' />
 <meta name='keywords' content='". $data_name .",test,quiz,exam,examination' /><meta name='description' content='". $desc . " ". $explain ."' />
 <meta property='og:image' content='". $og_image ."' /><link type='text/css' rel='stylesheet' href='rsp81.css' /><link rel='icon' type='image/x-icon' href='rsp.ico' />
-<meta property='og:url' content='". $this_url ."' /><meta property='og:title' content='ข้อสอบ ". $data_name ." - ". $data_desc . "' />
+<meta property='og:url' content='". $og_url ."' /><meta property='og:title' content='ข้อสอบ ". $data_name ." - ". $data_desc . "' />
 <meta property='og:description' content='". $desc . " ". $explain ."' /><meta property='og:type' content='article' /></head><body id='main' $backgroundcolor>
 <div class='m_still' style='".$css["header"]."'>
 <img src='". $og_image ."' class='imgborder' style='float:right;' alt='cover image' /><span style='font-size:32px;font-weight:bold;'>แบบทดสอบ เตรียมสู่อุดมศึกษา</span>
@@ -211,8 +214,8 @@ $footer = "<link rel='stylesheet' href='../bootstrap/bootstrap.min.css' /><scrip
 <a href='?subj=pepe_engl_001'>อังกฤษ #p1</a> / <a href='?subj=maya_engl_001'>อังกฤษ #m1</a> / <a href='?subj=fondao_engl_001'>อังกฤษ #f1</a>
 <br/><a href='?". $subj ."'>คลิกเพื่อเริ่มต้นทำชุดนี้อีกครั้ง</a> / เวลา : $current_time<br/>Open source: 
 <a href='https://github.com/thaiall/code/blob/main/test3.php'>github.com</a> / <a href='?".$subj."&view=true'>view answer</a> / <a href='?".$subj."&view=true&answer=false'>view no answer</a></div></div>".$footer_tracker."</body></html>";
-$error_name = '<br/><span style="color:blue;font-size:20px;">กรอกชื่อ หรือนามสกุล ไม่ครบ<br/>แสดงว่าไม่อ่านคำชี้แจง ให้เริ่มต้นทำข้อสอบทั้งหมดใหม่</span><br/><br/>';
-$error_subj = '<br/><span style="color:blue;font-size:20px;">ไม่พบแฟ้มวิชาที่ท่านต้องการสอบ<br/>ต้องกลับไปเลือกวิชาให้ถูกต้อง</span><br/><br/>';
+$error_name = '<br/><center><span style="color:yellow;font-size:20px;">กรอกชื่อ หรือนามสกุล ไม่ครบ<br/>แสดงว่าไม่อ่านคำชี้แจง ให้เริ่มต้นทำข้อสอบทั้งหมดใหม่</span><br/>';
+$error_subj = '<br/><center><span style="color:blue;font-size:20px;">ไม่พบแฟ้มวิชาที่ท่านต้องการสอบ<br/>ต้องกลับไปเลือกวิชาให้ถูกต้อง</span><br/>';
 $remark = "<tr><td colspan='2' style='color:darkblue;text-align:left;font-size:16px;'><span class='bigcap35' style='line-height: 0.2;'>โ</span>ปรดดำเนินการให้ครบทุกข้อ 
 <span style='font-weight:bold;'>ก่อนคลิกปุ่มส่งคำตอบ</span> มีขั้นตอนดังนี้ <span style='font-weight:bold;'>1)</span> ทำข้อสอบให้ครบทุกข้อ 
 <span style='font-weight:bold;'>2)</span> กรอกทั้งชื่อ-สกุลของผู้ทำข้อสอบ <span style='font-weight:bold;'>3)</span> คลิกปุ่มส่งคำตอบ แล้วผลสอบจะถูกบันทึกเพียง 100 รายการล่าสุด
@@ -221,24 +224,22 @@ $remark_send = '<span style="color:blue;line-height:30px;">ขอย้ำว่
 $open_table = '<table style="width:100%">';
 $close_row = '</div></td></tr>'."\n";
 
-/* Pattern Functions */
+/* --- Pattern Section --- */
 function pat_footer_view(){
-return '</table></table><div style="width:100%;text-align:center;"><a href="test3.php">#</a></div>';
+$output = '</table></table><div style="width:100%;text-align:center;"><a href="test3.php">#</a></div>';
+return $output;
 }
-
 function pat_open_row($bg_color,$font_size){
 global $css;
 $output = "<tr style='$bg_color $font_size'><td><div style='".$css['quiz_box']."'>"; 
 echo $output;
 }
-
 function pat_radio($q,$choice,$label,$checkradio,$my_choice){
 global $css;
 $css_label = ($my_choice % 2 == 0) ? 'font_size_view_even' : 'font_size_view_odd'; 
 $output = "<table><td><input type='radio' name='$q[0]' $checkradio style='".$css['radio']."' value='". $choice ."' /></td><td><label style='". $css[$css_label] ."'>". $label."</label></td></table>";
 echo $output;
 }
-
 function pat_score_result($right,$wrong,$total,$current_time,$program_name){
 $output = "<div class='m_still' style='display:table;'>ผลการสอบ ของ<br/>". 
 htmlspecialchars($_POST["name"], ENT_QUOTES) . " ". 
@@ -250,8 +251,7 @@ htmlspecialchars($_POST["surname"], ENT_QUOTES). "<br/><span style='font-weight:
 "<br/><span style='font-weight:bold;'>แล้วเสร็จเวลา</span> = ".$current_time.
 "<br/><a href='$program_name?action=report&top=10'>เปิดรายงานผลการสอบ 100 อันดับล่าสุด</a></div>";
 echo $output;
-}
-	  
+}	  
 function pat_name_form($remark,$name,$surname,$remark_send,$total_question,$data_name){
 $output = "<tr><td style='background-color:#cccccc;text-align:center;'>
 <table class='m_still' style='background-color:#dddddd;width:95%;margin-left:auto;margin-right:auto;padding-top:5px;'>
@@ -267,7 +267,6 @@ style='background-color:darkblue;color:white;font-size:20px;width:200px;height:4
 </td></tr></table></form>";
 echo $output;
 }
-
 function pat_view_eye_open($image_id,$txt_question,$txt_answer,$txt_qid){
 $output = "<div style='width:100%;text-align:center;'>
 <a style='margin:10px;' href='image.php?". $image_id ."' target='_blank' title='คำถาม : ". $txt_question ." [ ". $txt_qid ." ]' rel='lightbox[ข้อสอบออนไลน์]'>
@@ -276,13 +275,11 @@ $output = "<div style='width:100%;text-align:center;'>
 <span class=\'glyphicon glyphicon-comment\' style=\'font-size:30px;color:green;\'></span></a></div>';
 echo $output;
 }
-
 function pat_incomplete($right,$wrong,$total){
 $output = "<div class='m_still' style='color:blue;font-size:20px;'>ท่านทำข้อสอบเพียง : " .($right + $wrong).
 " ข้อ<br/>ไม่ครบ ".$total." ข้อ<br/>จึงไม่ตรวจให้ .. ท่านต้องกลับไปทำให้ครบ<br/><button onclick='history.back()'>กลับไปทำใหม่</button></span></div>";
 echo $output;
 }
-
 function pat_row_report($bg_color,$i,$ar){
 $output = "<tr style='font-size:10px !important;$bg_color'><td style='font-size:16px;text-align:center;'>$i</td><td style='font-size:16px;'>$ar[0] $ar[1]</td>
 <td><a href=?subj=$ar[2]>$ar[2]</a></td><td align=center>$ar[3]</td><td align=center>$ar[4]</td><td>$ar[5]</td><td>$ar[6]</td></tr>";
@@ -302,7 +299,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'report') {
   }	
   footer($footer);
 }
-
 /* --- Function Section --- */
 /* Action Report Function */
 function action_report($score_name) {
@@ -315,19 +311,18 @@ foreach ($ar as $k=>$v) {
   $i++;
   if (!isset($_GET['top']) || $i <= $_GET['top']) {
     $ar = explode("\t",$v);
-	$bg_color = (strlen($bg_color) == 0) ? $css['bg_color_default'] : '';
-	$bg_color = (isset($ar[3]) && isset($ar[4]) && $ar[3] == $ar[4]) ? $css["bg_color_good"] : $bg_color;
+    $bg_color = (strlen($bg_color) == 0) ? $css['bg_color_default'] : '';
+    $bg_color = (isset($ar[3]) && isset($ar[4]) && $ar[3] == $ar[4]) ? $css["bg_color_good"] : $bg_color;
     if (isset($ar[0]) && isset($ar[1]) && isset($ar[2]) && isset($ar[3]) && isset($ar[4]) && isset($ar[5]) && isset($ar[6])) pat_row_report($bg_color,$i,$ar);
   }
 } /* foreach */
 exit($footer_ads.$footer);
 }
-
 /* Read Quiz File and Make Randomization Function */
 function read_quiz_file($data_namef) {
 global $qok,$rnd,$cnt_quiz,$error_subj,$footer;
 $cnt_quiz = 0;
-if (!file_exists($data_namef)) exit("[ " . $data_namef . " ]".$error_subj.$footer);
+if (!file_exists($data_namef)) exit($data_namef.$error_subj.$footer);
 $ar = file($data_namef);
 foreach ($ar as $v) {
   $q = explode("\t",$v);
@@ -338,14 +333,12 @@ foreach ($ar as $v) {
   }
 }
 }
-
 /* Action Check Function */
 function action_check($score_name) {
 global $header,$error_name,$footer,$qok,$cnt_quiz,$qans,$program_name,$user_limited,$current_time,$redirect_tag;
 echo $header;
 if (strlen($_POST['name']) == 0 || strlen($_POST['surname']) == 0 || strlen(iconv('UTF-8','TIS-620',$_POST['surname'])) > 30 || strlen(iconv('UTF-8','TIS-620',$_POST['name'])) > 30 ) {
   unset($_SESSION["start"]);
-  echo strlen(iconv('UTF-8','TIS-620',$_POST['surname'])) .'-'. strlen(iconv('UTF-8','TIS-620',$_POST['name']));
   exit($error_name.$footer);
 }
 $right = $wrong = 0;
@@ -382,7 +375,6 @@ if ($total <= ($right + $wrong)) {
   pat_incomplete($right,$wrong,$total);	  
 }
 }
-
 /* Display Question and Choice Function */
 function display_all_questions($data_namef){
 global $css, $header, $header_ads, $open_form, $open_table, $close_row, $current_time, $rnd, $qok, $remark, $remark_send, $name, $surname, $data_name;
@@ -416,11 +408,9 @@ foreach ($rnd as $k=>$v) {
 }
 if(!isset($_REQUEST['view'])) pat_name_form($remark,$name,$surname,$remark_send,$total_question,$data_name);
 }
-
 /* Footer Function */
 function footer($footer){
-  if(isset($_REQUEST['view']))
-    $footer = pat_footer_view();
+  if(isset($_REQUEST['view'])) $footer = pat_footer_view();
   exit($footer); /* หยุดแสดง google adsense $footer_ads */
 }
 ?>
